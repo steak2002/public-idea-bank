@@ -2,33 +2,13 @@
 
 "use client";
 
-import { useEffect, useState } from "react";
-import { fetchIdeas } from "../infrastructure/fetch-ideas"
+import { useIdeas } from "../hooks/use-ideas";
 
-interface Idea {
-    id: string;
-    title: string;
-    description: string;
-    image_url?: string;
-    created_at: string;
-}
 
 export function IdeasListView() {
-    const [ideas, setIdeas] = useState<Idea[]>([]);
-    const [loading, setLoading] = useState(true);
+    const { ideas, loading } = useIdeas();
 
-    useEffect(() => {
-        async function loadIdeas() {
-            const data = await fetchIdeas();
-            setIdeas(data);
-            setLoading(false);
-        }
-        loadIdeas();
-    }, []);
-
-    if (loading) {
-        return <p className="text-center mt-8">Loading ideas...</p>;
-    }
+    if (loading) { return <p className="text-center mt-8">Loading ideas...</p>; }
 
     if (ideas.length === 0) return <p className="text-center mt-8 text-gray-500">No ideas yet. Submit the first one!</p>;
 

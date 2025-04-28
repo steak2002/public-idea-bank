@@ -1,17 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { submitIdea } from "../infrastructure/submit-idea"; // Import the submitIdea function
+import { submitIdea } from "../infrastructure/submit-idea";
 import { useRouter } from "next/navigation";
-
+import { useIdeaStore } from "../stores/idea-store";
 
 export function IdeaForm() {
     const router = useRouter();
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [image, setImage] = useState<File | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+
+    const setLoading = useIdeaStore((state) => state.setLoading);
+    const setError = useIdeaStore((state) => state.setError);
+    const loading = useIdeaStore((state) => state.loading);
+    const error = useIdeaStore((state) => state.error);
 
     async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
@@ -20,8 +23,6 @@ export function IdeaForm() {
 
         try {
             await submitIdea({ title, description, image });
-
-            // TODO: Add success behavior (clear form or redirect)
             router.push("/ideas");
         } catch (err) {
             console.error(err);

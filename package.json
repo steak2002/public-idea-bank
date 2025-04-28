@@ -6,24 +6,35 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "vitest",
+    "test:integration": "TEST_ENV=integration vitest run",
+    "test:watch": "vitest watch"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.4",
+    "cross-fetch": "^4.1.0",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "ws": "^8.18.1",
     "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^16.5.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
+    "jsdom": "^26.1.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.1.2"
   }
 }

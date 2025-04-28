@@ -1,3 +1,5 @@
+//src/features/ideas/infrastructure/submit-idea.ts
+
 import { supabase } from "@/shared/services/supabase-client";
 
 interface SubmitIdeaParams {
@@ -7,6 +9,10 @@ interface SubmitIdeaParams {
 }
 
 export async function submitIdea({ title, description, image }: SubmitIdeaParams) {
+    if (!title.trim() || !description.trim()) {
+        throw new Error("Title and description are required");
+    }
+
     let imageUrl: string | null = null;
 
     if (image) {
@@ -17,7 +23,7 @@ export async function submitIdea({ title, description, image }: SubmitIdeaParams
 
         if (uploadError) {
             console.error("Upload error:", uploadError);
-            throw new Error("Image upload failed");
+            throw new Error(uploadError.message);
         }
         imageUrl = data?.path ?? null;
     }
@@ -31,6 +37,8 @@ export async function submitIdea({ title, description, image }: SubmitIdeaParams
     ]);
 
     if (error) {
-        throw new Error("Failed to submit idea");
+        console.error("Insert error:", error);
+        throw new Error(error.message);
     }
 }
+
