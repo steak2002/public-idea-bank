@@ -2,17 +2,21 @@
 
 // 1. Polyfill fetch and WebSocket for Node.js (vitest, server tests)
 if (typeof window === "undefined") {
-    const fetch = (await import('cross-fetch')).default;
-    const WebSocket = (await import('ws')).default;
+    import('cross-fetch').then(({ default: fetchPolyfill }) => {
+        if (!globalThis.fetch) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (globalThis as any).fetch = fetchPolyfill;
+        }
+    });
 
-    if (!globalThis.fetch) {
-        (globalThis as any).fetch = fetch;
-    }
-
-    if (!globalThis.WebSocket) {
-        (globalThis as any).WebSocket = WebSocket;
-    }
+    import('ws').then(({ default: webSocketPolyfill }) => {
+        if (!globalThis.WebSocket) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (globalThis as any).WebSocket = webSocketPolyfill;
+        }
+    });
 }
+
 
 import { createClient } from '@supabase/supabase-js';
 
@@ -27,7 +31,4 @@ if (!supabaseUrl || !supabaseAnonKey) {
 }
 
 // 3. Create the Supabase client
-export const supabase = createClient(
-    supabaseUrl,
-    supabaseAnonKey
-);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);

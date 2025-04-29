@@ -1,6 +1,5 @@
 // src/test/utils/supabase-mocks.ts
 import { supabase } from "@/shared/services/supabase-client";
-import type { SupabaseClient } from "@supabase/supabase-js";
 import { vi, Mock } from "vitest";
 
 const supabaseMock = supabase as unknown as {
