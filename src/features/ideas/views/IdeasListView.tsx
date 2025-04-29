@@ -3,6 +3,7 @@
 "use client";
 
 import { useIdeas } from "../hooks/use-ideas";
+import Image from "next/image";
 
 
 export function IdeasListView() {
@@ -20,10 +21,12 @@ export function IdeasListView() {
                     <p className="text-sm text-gray-600 mb-2">{new Date(idea.created_at).toLocaleDateString()}</p>
                     <p className="mb-4">{idea.description}</p>
                     {idea.image_url && (
-                        <img
+                        <Image
                             src={idea.image_url}
                             alt={idea.title}
                             className="max-h-48 object-cover rounded"
+                            width={500}
+                            height={300}
                         />
                     )}
                 </div>
