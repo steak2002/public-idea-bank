@@ -2,8 +2,8 @@
 
 // 1. Polyfill fetch and WebSocket for Node.js (vitest, server tests)
 if (typeof window === "undefined") {
-    const fetch = require('cross-fetch');
-    const WebSocket = require('ws');
+    const fetch = (await import('cross-fetch')).default;
+    const WebSocket = (await import('ws')).default;
 
     if (!globalThis.fetch) {
         (globalThis as any).fetch = fetch;

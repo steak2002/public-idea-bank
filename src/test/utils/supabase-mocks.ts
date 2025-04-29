@@ -1,8 +1,14 @@
 // src/test/utils/supabase-mocks.ts
 import { supabase } from "@/shared/services/supabase-client";
-import { vi } from "vitest";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { vi, Mock } from "vitest";
 
-const supabaseMock = supabase as any;
+const supabaseMock = supabase as unknown as {
+    from: Mock;
+    storage: {
+        from: Mock;
+    };
+};
 
 export function mockSupabaseInsertSuccess() {
     supabaseMock.from.mockReturnValue({
@@ -58,33 +64,20 @@ export function mockSupabaseUploadFailure(message = "Upload failed") {
     });
 }
 
-
-export function mockSupabaseSelectIdeasSuccess(ideas: any[] = []) {
-    const select = vi.fn().mockReturnThis();
-    const order = vi.fn().mockResolvedValue({
-        data: ideas,
-        error: null,
-    });
-
-    const from = vi.fn(() => ({
-        select: () => ({
-            order,
+export function mockSupabaseSelectIdeasSuccess(ideas: unknown[] = []) {
+    supabaseMock.from.mockReturnValue({
+        select: vi.fn().mockReturnThis(),
+        order: vi.fn().mockResolvedValue({
+            data: ideas,
+            error: null,
         }),
-    }));
-
-    const supabaseMock = supabase as any;
-    supabaseMock.from.mockImplementation(from);
+    });
 }
 
-
 export function mockSupabaseGetPublicUrl(path = "https://fakeurl.com/fake-image.png") {
-    const supabaseMock = supabase as any;
-
     supabaseMock.storage.from.mockReturnValue({
-        getPublicUrl: vi.fn((imagePath: string) => ({
-            data: {
-                publicUrl: `${path}`,
-            },
+        getPublicUrl: vi.fn(() => ({
+            data: { publicUrl: path },
             error: null,
         })),
     });
